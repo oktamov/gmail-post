@@ -10,12 +10,12 @@ from .models import UserForm1, UserForm2
 from .serializer import UserForm1Serializer, UserForm2Serializer, EmailSerializer
 
 
-class UserForm1CreateAPIView(generics.CreateAPIView):
+class UserForm1CreateAPIView(generics.ListCreateAPIView):
     queryset = UserForm1.objects.all()
     serializer_class = UserForm1Serializer
 
 
-class UserForm2CreateAPIView(generics.CreateAPIView):
+class UserForm2CreateAPIView(generics.ListCreateAPIView):
     queryset = UserForm2.objects.all()
     serializer_class = UserForm2Serializer
 
