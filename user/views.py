@@ -1,17 +1,14 @@
 import os
 from email.mime.multipart import MIMEMultipart
 
-from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.response import Response
-from rest_framework.views import APIView
 
 from gmail_html import HTML
 from root import settings
-from .models import UserForm1, UserForm2
-from .serializer import UserForm1Serializer, UserForm2Serializer, EmailSerializer
+from .models import UserForm1, UserForm2, CategoryNews, News
+from .serializer import UserForm1Serializer, UserForm2Serializer, CategoryNewsSerializer, NewsSerializer
 
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
@@ -23,10 +20,8 @@ def email_send_html(html, to_email):
     msg = MIMEMultipart()
     msg['Subject'] = f'Nikel token'
     msg['From'] = my_email
-    msg['To'] = 'oktamovdev@gmail.com'
 
-    body = html
-    msg.attach(MIMEText(body, 'html'))
+    msg.attach(MIMEText(render_to_string('index.html'), 'html'))
 
     with SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(my_email, password)
@@ -60,19 +55,21 @@ class UserForm2CreateAPIView(generics.ListCreateAPIView):
         except Exception as e:
             return Response({'error': 'Email don\'t send successfully'}, status=status.HTTP_400_BAD_REQUEST)
 
-# class SendEmailAPIView(APIView):
-#     @swagger_auto_schema(request_body=EmailSerializer)
-#     def post(self, request, *args, **kwargs):
-#         serializer = EmailSerializer(data=request.data)
-#         if serializer.is_valid():
-#             email = serializer.validated_data['email']
-#             text = serializer.validated_data['text']
-#             send_mail(
-#                 subject='Message from Your Django App',
-#                 message=text,
-#                 from_email=os.getenv("EMAIL_HOST_USER"),
-#                 recipient_list=[email],
-#                 fail_silently=False,
-#             )
-#             return Response({'message': 'Email sent successfully'}, status=status.HTTP_200_OK)
-#         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CategoryNewsListView(generics.ListAPIView):
+    queryset = CategoryNews.objects.all()
+    serializer_class = CategoryNewsSerializer
+
+
+class NewsListView(generics.ListAPIView):
+    serializer_class = NewsSerializer
+
+    def get_queryset(self):
+        """
+        Optionally filters the news by 'status' parameter in the URL.
+        """
+        queryset = News.objects.all()
+        status = self.request.query_params.get('status', None)
+        if status is not None:
+            queryset = queryset.filter(status=status)
+        return queryset

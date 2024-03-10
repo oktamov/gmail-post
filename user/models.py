@@ -21,3 +21,48 @@ class UserForm2(models.Model):
 
     def __str__(self):
         return self.full_name
+
+
+class Images(models.Model):
+    image = models.ImageField(upload_to='images')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+class Videos(models.Model):
+    video = models.FileField(upload_to='videos')
+    title = models.CharField(max_length=255)
+    description = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
+class News(models.Model):
+    STATUS_CHOICES = (
+        ('trending', 'Trending stories'),
+        ('videos', 'Videos'),
+    )
+
+    title = models.CharField(max_length=255)
+    images = models.ManyToManyField(Images, blank=True, related_name='image_news')
+    videos = models.ManyToManyField(Videos, blank=True, related_name='video_news')
+    description = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='trending')
+
+    def __str__(self):
+        return self.title
+
+
+
+class CategoryNews(models.Model):
+    title1 = models.CharField(max_length=255)
+    title2 = models.CharField(max_length=255, blank=True, null=True)
+    url = models.URLField(blank=True)
+    image = models.ImageField(upload_to='images')
+
+    def __str__(self):
+        return self.title1
