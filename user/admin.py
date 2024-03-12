@@ -1,60 +1,70 @@
 from django.contrib import admin
-from .models import UserForm1, UserForm2, Videos, Images, News
-
-
-class UserForm1Admin(admin.ModelAdmin):
-    list_display = ('full_name', 'phone', 'email', 'nationality', 'date', 'address', 'amount')
-    search_fields = ('full_name', 'email', 'nationality')
-    list_filter = ('nationality', 'date')
-    date_hierarchy = 'date'
-
-
-class UserForm2Admin(admin.ModelAdmin):
-    list_display = ('full_name', 'role', 'email')
-    search_fields = ('full_name', 'email')
-    list_filter = ('role',)
-
-
-admin.site.register(UserForm1, UserForm1Admin)
-admin.site.register(UserForm2, UserForm2Admin)
+from rest_framework.exceptions import ValidationError
+from django import forms
+from .models import UserForm1, UserForm2, Images, Videos, News, CategoryNews
 
 
 class ImagesInline(admin.TabularInline):
     model = News.images.through
     extra = 1
-    verbose_name = 'Image'
-    verbose_name_plural = 'Related Images'
 
 
-# Inline admin for Videos inside News
-class VideosInline(admin.TabularInline):
+class VideosInline(admin.StackedInline):
     model = News.videos.through
     extra = 1
-    verbose_name = 'Video'
-    verbose_name_plural = 'Related Videos'
 
 
-# Admin for News
-@admin.register(News)
 class NewsAdmin(admin.ModelAdmin):
+    list_display = ('cover_title', 'title', 'status', 'created_at')
+    list_filter = ('status', 'created_at')
+    search_fields = ('title', 'cover_title')
     inlines = [ImagesInline, VideosInline]
-    list_display = ('title', 'status', 'description_short')
-    list_filter = ('status',)
-    search_fields = ('title', 'description')
-    exclude = ('images', 'videos',)  # Exclude the direct many-to-many fields to use inlines instead
-
-    def description_short(self, obj):
-        return (obj.description[:50] + '...') if len(obj.description) > 50 else obj.description
-
-    description_short.short_description = 'Description'
+    exclude = ('images', 'videos')
 
 
-# Optionally, register Images and Videos if not already done
-@admin.register(Images)
+class UserForm1AdminForm(forms.ModelForm):
+    class Meta:
+        model = UserForm1
+        fields = '__all__'
+
+    def clean_phone(self):
+        phone = self.cleaned_data.get('phone')
+        if not phone.startswith('+'):
+            raise ValidationError('Telefon raqami "+" belgisi bilan boshlanishi kerak.')
+        return phone
+
+
+class UserForm1Admin(admin.ModelAdmin):
+    form = UserForm1AdminForm
+    list_display = ('full_name', 'phone', 'email', 'nationality', 'date', 'amount')
+    search_fields = ('full_name', 'nationality')
+    readonly_fields = ('email',)
+
+
+class UserForm2Admin(admin.ModelAdmin):
+    list_display = ('full_name', 'role', 'email')
+    search_fields = ('full_name', 'role')
+
+
 class ImagesAdmin(admin.ModelAdmin):
-    list_display = ['id', 'image']
+    list_display = ('sub_title1', 'sub_description1', 'sub_title2', 'sub_description2')
+    search_fields = ('sub_title1',)
 
 
-@admin.register(Videos)
 class VideosAdmin(admin.ModelAdmin):
-    list_display = ['id', 'video']
+    list_display = ('title', 'description')
+    search_fields = ('title',)
+
+
+class CategoryNewsAdmin(admin.ModelAdmin):
+    list_display = ('title1', 'title2', 'created_at')
+    search_fields = ('title1', 'title2')
+
+
+# Admin ro'yxatga olishlar...
+admin.site.register(UserForm1, UserForm1Admin)
+admin.site.register(UserForm2, UserForm2Admin)
+admin.site.register(Images, ImagesAdmin)
+admin.site.register(Videos, VideosAdmin)
+admin.site.register(News, NewsAdmin)
+admin.site.register(CategoryNews, CategoryNewsAdmin)

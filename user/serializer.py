@@ -28,7 +28,7 @@ class CategoryNewsSerializer(serializers.ModelSerializer):
 class ImagesSerializer(serializers.ModelSerializer):
     class Meta:
         model = Images
-        fields = ('image', 'title', 'description')
+        fields = ('image', 'sub_title1', 'sub_description1', 'sub_title2', 'sub_description2')
 
 
 class VideosSerializer(serializers.ModelSerializer):
@@ -43,4 +43,4 @@ class NewsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = News
-        fields = ('title', 'images', 'videos', 'description', 'status')
+        fields = ('cover_title', 'title', 'images', 'videos', 'description', 'status', 'created_at')

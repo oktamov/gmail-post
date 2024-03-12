@@ -25,11 +25,13 @@ class UserForm2(models.Model):
 
 class Images(models.Model):
     image = models.ImageField(upload_to='images')
-    title = models.CharField(max_length=255)
-    description = models.TextField()
+    sub_title1 = models.CharField(max_length=255)
+    sub_description1 = models.TextField()
+    sub_title2 = models.CharField(max_length=255, null=True, blank=True)
+    sub_description2 = models.TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.title
+        return self.sub_title1
 
 
 class Videos(models.Model):
@@ -47,15 +49,16 @@ class News(models.Model):
         ('videos', 'Videos'),
     )
 
+    cover_title = models.CharField(max_length=255)
     title = models.CharField(max_length=255)
     images = models.ManyToManyField(Images, blank=True, related_name='image_news')
     videos = models.ManyToManyField(Videos, blank=True, related_name='video_news')
     description = models.TextField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='trending')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.title
-
+        return self.cover_title
 
 
 class CategoryNews(models.Model):
@@ -63,6 +66,7 @@ class CategoryNews(models.Model):
     title2 = models.CharField(max_length=255, blank=True, null=True)
     url = models.URLField(blank=True)
     image = models.ImageField(upload_to='images')
+    created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title1
