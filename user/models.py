@@ -50,6 +50,7 @@ class News(models.Model):
     )
 
     cover_title = models.CharField(max_length=255)
+    cover_image = models.ImageField(upload_to='images', null=True, blank=True)
     title = models.CharField(max_length=255)
     images = models.ManyToManyField(Images, blank=True, related_name='image_news')
     videos = models.ManyToManyField(Videos, blank=True, related_name='video_news')
