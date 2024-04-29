@@ -77,5 +77,5 @@ class NewsListView(generics.ListAPIView):
 
 
 class TrendingStoriesListView(generics.ListAPIView):
-    queryset = TrendingStories.objects.all()
+    queryset = TrendingStories.objects.order_by('-id')
     serializer_class = TrendingStoriesSerializer
