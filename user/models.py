@@ -71,3 +71,11 @@ class CategoryNews(models.Model):
 
     def __str__(self):
         return self.title1
+
+
+class TrendingStories(models.Model):
+    title = models.CharField(max_length=255)
+    url = models.URLField()
+
+    def __str__(self):
+        return self.title

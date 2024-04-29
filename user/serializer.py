@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import UserForm1, UserForm2, CategoryNews, Images, Videos, News
+from .models import UserForm1, UserForm2, CategoryNews, Images, Videos, News, TrendingStories
 
 
 class UserForm1Serializer(serializers.ModelSerializer):
@@ -44,3 +44,9 @@ class NewsSerializer(serializers.ModelSerializer):
     class Meta:
         model = News
         fields = ('cover_title', 'cover_image', 'title', 'images', 'videos', 'description', 'status', 'created_at')
+
+
+class TrendingStoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TrendingStories
+        fields = ('title', 'url')

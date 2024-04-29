@@ -7,8 +7,9 @@ from rest_framework.response import Response
 
 from gmail_html import HTML
 from root import settings
-from .models import UserForm1, UserForm2, CategoryNews, News
-from .serializer import UserForm1Serializer, UserForm2Serializer, CategoryNewsSerializer, NewsSerializer
+from .models import UserForm1, UserForm2, CategoryNews, News, TrendingStories
+from .serializer import UserForm1Serializer, UserForm2Serializer, CategoryNewsSerializer, NewsSerializer, \
+    TrendingStoriesSerializer
 
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
@@ -73,3 +74,8 @@ class NewsListView(generics.ListAPIView):
         if status is not None:
             queryset = queryset.filter(status=status)
         return queryset
+
+
+class TrendingStoriesListView(generics.ListAPIView):
+    queryset = TrendingStories.objects.all()
+    serializer_class = TrendingStoriesSerializer
