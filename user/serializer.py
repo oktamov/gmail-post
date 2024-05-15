@@ -49,4 +49,4 @@ class NewsSerializer(serializers.ModelSerializer):
 class TrendingStoriesSerializer(serializers.ModelSerializer):
     class Meta:
         model = TrendingStories
-        fields = ('title', 'url')
+        fields = ('title', 'url', 'description', 'created_at')

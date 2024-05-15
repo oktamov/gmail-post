@@ -75,7 +75,9 @@ class CategoryNews(models.Model):
 
 class TrendingStories(models.Model):
     title = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
     url = models.URLField()
+    created_at = models.DateTimeField(auto_now_add=True, null=True, blank=True)
 
     def __str__(self):
         return self.title
