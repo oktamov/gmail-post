@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from gmail_html import HTML
 from root import settings
 from .models import UserForm1, UserForm2, CategoryNews, News, TrendingStories
-from .pagination import CustomPagination
+from .pagination import CustomLimitOffsetPagination
 from .serializer import UserForm1Serializer, UserForm2Serializer, CategoryNewsSerializer, NewsSerializer, \
     TrendingStoriesSerializer
 
@@ -65,7 +65,7 @@ class CategoryNewsListView(generics.ListAPIView):
 
 class NewsListView(generics.ListAPIView):
     serializer_class = NewsSerializer
-    pagination_class = CustomPagination
+    pagination_class = CustomLimitOffsetPagination
 
     def get_queryset(self):
         """
