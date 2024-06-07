@@ -2,6 +2,8 @@ import os
 from email.mime.multipart import MIMEMultipart
 
 from django.template.loader import render_to_string
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework import generics, status
 from rest_framework.response import Response
 
@@ -63,19 +65,37 @@ class CategoryNewsListView(generics.ListAPIView):
     serializer_class = CategoryNewsSerializer
 
 
-class NewsListView(generics.ListAPIView):
+class NewsListView(generics.GenericAPIView):
     serializer_class = NewsSerializer
     pagination_class = CustomLimitOffsetPagination
 
     def get_queryset(self):
-        """
-        Optionally filters the news by 'status' parameter in the URL.
-        """
         queryset = News.objects.all()
         status = self.request.query_params.get('status', None)
         if status is not None:
             queryset = queryset.filter(status=status)
         return queryset
+
+    @swagger_auto_schema(
+        manual_parameters=[
+            openapi.Parameter(
+                name="status",
+                in_=openapi.IN_QUERY,
+                type=openapi.TYPE_STRING,
+                description=News.STATUS_CHOICES,
+            ),
+        ]
+    )
+    def get(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class TrendingStoriesListView(generics.ListAPIView):
