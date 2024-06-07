@@ -101,3 +101,5 @@ class NewsListView(generics.GenericAPIView):
 class TrendingStoriesListView(generics.ListAPIView):
     queryset = TrendingStories.objects.order_by('-id')
     serializer_class = TrendingStoriesSerializer
+    pagination_class = CustomLimitOffsetPagination
+
