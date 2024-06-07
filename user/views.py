@@ -65,7 +65,7 @@ class CategoryNewsListView(generics.ListAPIView):
 
 class NewsListView(generics.ListAPIView):
     serializer_class = NewsSerializer
-    pagination_class = [CustomPagination]
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         """
