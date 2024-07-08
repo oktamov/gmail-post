@@ -56,7 +56,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'corsheaders',
-    'django_filters'
+    'django_filters',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -165,4 +166,3 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 500
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 100
-
