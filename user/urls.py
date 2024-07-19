@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import UserForm1CreateAPIView, UserForm2CreateAPIView, \
-    CategoryNewsListView, NewsListView, TrendingStoriesListView, NewsDetailView
-    CategoryNewsListView, NewsListView, TrendingStoriesListView, SpeechAnalysisCreateView
+    CategoryNewsListView, NewsListView, TrendingStoriesListView, NewsDetailView, SpeechAnalysisCreateView
+
 
 urlpatterns = [
     path('userform1/create/', UserForm1CreateAPIView.as_view(), name='userform1-create'),

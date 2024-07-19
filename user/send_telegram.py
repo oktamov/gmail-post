@@ -1,6 +1,5 @@
 import requests
 
-from root import settings
 
 
 def send_order_notification(full_name, company_name, email):
