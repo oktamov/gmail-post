@@ -81,3 +81,12 @@ class TrendingStories(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class SpeechAnalysis(models.Model):
+    full_name = models.CharField(max_length=255)
+    company_name = models.CharField(max_length=255)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.full_name

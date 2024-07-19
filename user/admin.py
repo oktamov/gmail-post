@@ -1,7 +1,7 @@
 from django.contrib import admin
 from rest_framework.exceptions import ValidationError
 from django import forms
-from .models import UserForm1, UserForm2, Images, Videos, News, CategoryNews, TrendingStories
+from .models import UserForm1, UserForm2, Images, Videos, News, CategoryNews, TrendingStories, SpeechAnalysis
 
 
 class ImagesInline(admin.TabularInline):
@@ -66,6 +66,11 @@ class TrendingStoriesAdmin(admin.ModelAdmin):
     search_fields = ('title', 'url')
 
 
+class SpeechAnalysisAdmin(admin.ModelAdmin):
+    list_display = ('full_name', 'company_name', 'email')
+    search_fields = ('full_name',)
+
+
 # Admin ro'yxatga olishlar...
 admin.site.register(UserForm1, UserForm1Admin)
 admin.site.register(UserForm2, UserForm2Admin)
@@ -74,3 +79,4 @@ admin.site.register(Videos, VideosAdmin)
 admin.site.register(News, NewsAdmin)
 admin.site.register(CategoryNews, CategoryNewsAdmin)
 admin.site.register(TrendingStories, TrendingStoriesAdmin)
+admin.site.register(SpeechAnalysis, SpeechAnalysisAdmin)

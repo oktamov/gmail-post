@@ -7,10 +7,11 @@ from rest_framework.response import Response
 
 from gmail_html import HTML
 from root import settings
-from .models import UserForm1, UserForm2, CategoryNews, News, TrendingStories
+from .models import UserForm1, UserForm2, CategoryNews, News, TrendingStories, SpeechAnalysis
 from .pagination import CustomLimitOffsetPagination
+from .send_telegram import send_order_notification
 from .serializer import UserForm1Serializer, UserForm2Serializer, CategoryNewsSerializer, NewsSerializer, \
-    TrendingStoriesSerializer
+    TrendingStoriesSerializer, SpeechAnalysisSerializer
 
 from email.mime.text import MIMEText
 from smtplib import SMTP_SSL
@@ -81,3 +82,18 @@ class NewsListView(generics.ListAPIView):
 class TrendingStoriesListView(generics.ListAPIView):
     queryset = TrendingStories.objects.order_by('-id')
     serializer_class = TrendingStoriesSerializer
+
+
+class SpeechAnalysisCreateView(generics.CreateAPIView):
+    queryset = SpeechAnalysis.objects.all()
+    serializer_class = SpeechAnalysisSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        full_name = serializer.validated_data['full_name']
+        company_name = serializer.validated_data['company_name']
+        email = serializer.validated_data['email']
+        send_order_notification(full_name, company_name, email)
+        queryset = SpeechAnalysis.objects.create(full_name=full_name, company_name=company_name, email=email)
+        return Response({'detail: Successfully created'}, status=status.HTTP_201_CREATED)
