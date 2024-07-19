@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'corsheaders',
+    'django_filters',
+    'import_export',
 ]
 
 MIDDLEWARE = [
@@ -150,6 +152,9 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework.authentication.SessionAuthentication",
     ),
+    'DEFAULT_FILTER_BACKENDS': (
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ),
     "DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.AllowAny"],
 }
 
@@ -161,4 +166,3 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True
 DATA_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 500
 FILE_UPLOAD_MAX_MEMORY_SIZE = 1024 * 1024 * 100
-
